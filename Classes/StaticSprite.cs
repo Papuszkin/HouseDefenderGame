@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HouseDefenderGame.Classes
 {
-    class Sprite
+    class StaticSprite
     {
         // Positioning
         public Vector2 Position { get; set; }
@@ -21,7 +21,7 @@ namespace HouseDefenderGame.Classes
         // State
         public bool IsSolid { get; set; }
 
-        public Sprite(Vector2 position, float rotation, Texture2D texture, Color setColor, bool isSolid)
+        public StaticSprite(Vector2 position, float rotation, Texture2D texture, Color setColor, bool isSolid)
         {
             Position = position;
             Rotation = rotation;
