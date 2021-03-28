@@ -1,13 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using Microsoft.Xna.Framework.Media;
 namespace HouseDefenderGame
 {
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        //ppiosenka w menu glownym gry
+        protected Song song;
 
         public Game1()
         {
@@ -21,11 +26,17 @@ namespace HouseDefenderGame
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Odtwarzanie muzyki przy wlaczeniu gry
+            song = Content.Load<Song>("BigBois");
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating= true;
 
             // TODO: use this.Content to load your game content here
         }
