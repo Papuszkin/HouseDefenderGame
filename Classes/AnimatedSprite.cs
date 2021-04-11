@@ -24,7 +24,7 @@ namespace HouseDefenderGame.Classes
             currentFrame = 0;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public new void Draw(SpriteBatch spriteBatch)
         {
             int row = (int)((float)currentFrame / (float)Columns);
             int column = currentFrame % Columns;
