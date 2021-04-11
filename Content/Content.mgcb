@@ -13,7 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin tempBrickWall.png
+
+#begin Player.png
+
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,6 +25,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+
 /build:tempBrickWall.png
 
 #begin tempDoor.png
@@ -60,4 +63,5 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:tempWindow.png
+
 
