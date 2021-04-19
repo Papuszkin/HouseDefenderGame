@@ -1,4 +1,5 @@
-﻿using HouseDefenderGame.Classes.Map;
+﻿using HouseDefenderGame.Classes.Gameplay;
+using HouseDefenderGame.Classes.Map;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,6 +15,8 @@ namespace HouseDefenderGame
         private List<Wall> houseWalls = new List<Wall>();
         private List<Window> houseWindows = new List<Window>();
         private List<Door> houseDoors = new List<Door>();
+
+        private Player player;
 
         public Game1()
         {
@@ -38,6 +41,9 @@ namespace HouseDefenderGame
             Texture2D wallTexture = Content.Load<Texture2D>("tempWallRepeating");
             Texture2D windowTexture = Content.Load<Texture2D>("tempWindow");
             Texture2D doorTexture = Content.Load<Texture2D>("tempDoor");
+
+            Texture2D playerTexture = Content.Load<Texture2D>("Player");
+            player = new Player(playerTexture, new Vector2(100, 100), 1, 3);
             
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
             houseDoors.Add(new Door(400, 350, true, doorTexture));
@@ -57,16 +63,21 @@ namespace HouseDefenderGame
 
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState ks = Keyboard.GetState();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
+            player.Update(ks, gameTime, houseWalls);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            MouseState ms = Mouse.GetState();
+
             GraphicsDevice.Clear(Color.DarkGreen);
 
             foreach (var wall in houseWalls)
@@ -84,6 +95,8 @@ namespace HouseDefenderGame
                 door.Draw(_spriteBatch);
             }
             // TODO: Add your drawing code here
+
+            player.Draw(_spriteBatch, ms);
 
             base.Draw(gameTime);
         }

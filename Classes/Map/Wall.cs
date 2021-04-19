@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HouseDefenderGame.Interfaces;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace HouseDefenderGame.Classes.Map
 {
-    public class Wall
+    public class Wall : ICollidable
     {
         static int WALL_THICKNESS = 32;
 
@@ -20,6 +21,7 @@ namespace HouseDefenderGame.Classes.Map
         public Texture2D WallTexture { get; set; }
         public Color TransparencyColor { get; set; }
 
+        public Rectangle Hitbox { get; set; }
 
         public Wall(int x, int y, int lenght, bool isHorizontal, Texture2D wallTexture)
         {
@@ -29,6 +31,15 @@ namespace HouseDefenderGame.Classes.Map
             IsHorizontal = isHorizontal;
             WallTexture = wallTexture;
             TransparencyColor = Color.White;
+
+            if (isHorizontal)
+            {
+                Hitbox = new Rectangle(X, y, lenght, WALL_THICKNESS);
+            }
+            else
+            {
+                Hitbox = new Rectangle(X, y, WALL_THICKNESS, lenght);
+            }
         }
 
         public void Draw(SpriteBatch sb)
