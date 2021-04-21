@@ -36,10 +36,11 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 Vector2 newPosiiton = new Vector2(Position.X, Position.Y - playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                Rectangle newRectangle = new Rectangle((int)newPosiiton.X - 16, (int)newPosiiton.Y - 16, 32, 32);
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Contains(newPosiiton))
+                    if (item.Hitbox.Intersects(newRectangle))
                     {
                         movementPossible = false;
                         return;
@@ -56,10 +57,11 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (keyboardState.IsKeyDown(Keys.S))
             {
                 Vector2 newPosiiton = new Vector2(Position.X, Position.Y + playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                Rectangle newRectangle = new Rectangle((int)newPosiiton.X - 16, (int)newPosiiton.Y - 16, 32, 32);
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Contains(newPosiiton))
+                    if (item.Hitbox.Intersects(newRectangle))
                     {
                         movementPossible = false;
                         return;
@@ -76,10 +78,11 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (keyboardState.IsKeyDown(Keys.A))
             {
                 Vector2 newPosiiton = new Vector2(Position.X - playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+                Rectangle newRectangle = new Rectangle((int)newPosiiton.X - 16, (int)newPosiiton.Y - 16, 32, 32);
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Contains(newPosiiton))
+                    if (item.Hitbox.Intersects(newRectangle))
                     {
                         movementPossible = false;
                         return;
@@ -97,10 +100,11 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 Vector2 newPosiiton = new Vector2(Position.X + playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+                Rectangle newRectangle = new Rectangle((int)newPosiiton.X - 16, (int)newPosiiton.Y - 16, 32, 32);
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Contains(newPosiiton))
+                    if (item.Hitbox.Intersects(newRectangle))
                     {
                         movementPossible = false;
                         return;
