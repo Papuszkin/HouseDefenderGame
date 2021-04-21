@@ -19,7 +19,7 @@ namespace HouseDefenderGame.Classes.Gameplay
         private int currentFrame;
         private int totalFrames;
         private float playerSpeed = 200f;
-        private bool isMoving;
+        public bool isMoving;
 
         public Player(Texture2D texture, Vector2 position, int rows, int columns)
         {
@@ -29,10 +29,12 @@ namespace HouseDefenderGame.Classes.Gameplay
             Columns = columns;
             currentFrame = 0;
             totalFrames = Rows * Columns;
+            isMoving = false;
         }
 
         public void Update(KeyboardState keyboardState, GameTime gameTime, IEnumerable<ICollidable> collidables)
         {
+            
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 Vector2 newPosiiton = new Vector2(Position.X, Position.Y - playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
