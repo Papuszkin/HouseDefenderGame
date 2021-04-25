@@ -1,5 +1,6 @@
 ﻿using HouseDefenderGame.Classes.Gameplay;
 using HouseDefenderGame.Classes.Map;
+using HouseDefenderGame.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,6 +16,8 @@ namespace HouseDefenderGame
         private List<Wall> houseWalls = new List<Wall>();
         private List<Window> houseWindows = new List<Window>();
         private List<Door> houseDoors = new List<Door>();
+
+        public static List<ICollidable> mapObjects = new List<ICollidable>();
 
         private Player player;
 
@@ -43,7 +46,8 @@ namespace HouseDefenderGame
             Texture2D doorTexture = Content.Load<Texture2D>("tempDoor");
 
             Texture2D playerTexture = Content.Load<Texture2D>("Player");
-            player = new Player(playerTexture, new Vector2(100, 100), 1, 3);
+            Texture2D hitmarkTexture = Content.Load<Texture2D>("Hitmark");
+            player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
             
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
             houseDoors.Add(new Door(400, 350, true, doorTexture));
@@ -58,6 +62,8 @@ namespace HouseDefenderGame
             houseWalls.Add(new Wall(300, 600, 900, true, wallTexture));
             houseWalls.Add(new Wall(300, 350, 250, false, wallTexture));
 
+
+            mapObjects.AddRange(houseWalls);
             // TODO: use this.Content to load your game content here
         }
 

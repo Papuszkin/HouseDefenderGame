@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using HouseDefenderGame.Interfaces;
 using Microsoft.Xna.Framework;
@@ -16,12 +17,19 @@ namespace HouseDefenderGame.Classes.Gameplay
         public Vector2 Position;
         public float Rotation { get; set; }
 
+        public List<Gun> GunInventory { get; set; }
+        public int CurrentGun { get; set; }
+        public int GunCooldown { get; set; }
+
+        public List<Vector2> Hitmarks { get; set; }
+        public Texture2D HitmarkTexture { get; set; }
+
         private int currentFrame;
         private int totalFrames;
         private float playerSpeed = 200f;
         private bool isMoving;
 
-        public Player(Texture2D texture, Vector2 position, int rows, int columns)
+        public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture)
         {
             Texture = texture;
             Position = position;
@@ -29,10 +37,28 @@ namespace HouseDefenderGame.Classes.Gameplay
             Columns = columns;
             currentFrame = 0;
             totalFrames = Rows * Columns;
+            isMoving = false;
+
+            GunInventory = new List<Gun> {
+                // Name Damage Pellets Spread RateOfFire
+                new Gun("Pistol", 5, 1, 5, 30),
+                new Gun("Shotgun", 10, 5, 7, 60),
+                new Gun("Chaingun", 5, 1, 4, 10),
+                new Gun("Sniper", 20, 1, 1, 90)
+            };
+            CurrentGun = 0;
+            GunCooldown = 0;
+
+            Hitmarks = new List<Vector2>();
+            HitmarkTexture = hitmarkTexture;
         }
 
         public void Update(KeyboardState keyboardState, GameTime gameTime, IEnumerable<ICollidable> collidables)
         {
+            MouseState mouseState = Mouse.GetState();
+
+            // W
+            // Move up
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 Vector2 newPosiiton = new Vector2(Position.X, Position.Y - playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -54,6 +80,8 @@ namespace HouseDefenderGame.Classes.Gameplay
                 }
             }
             
+            // S
+            // Move down
             if (keyboardState.IsKeyDown(Keys.S))
             {
                 Vector2 newPosiiton = new Vector2(Position.X, Position.Y + playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -75,6 +103,8 @@ namespace HouseDefenderGame.Classes.Gameplay
                 }
             }
             
+            // A
+            // Move left
             if (keyboardState.IsKeyDown(Keys.A))
             {
                 Vector2 newPosiiton = new Vector2(Position.X - playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
@@ -97,6 +127,8 @@ namespace HouseDefenderGame.Classes.Gameplay
                 
             }
             
+            // D
+            // Move right
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 Vector2 newPosiiton = new Vector2(Position.X + playerSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
@@ -119,6 +151,43 @@ namespace HouseDefenderGame.Classes.Gameplay
                 
             }
 
+            // LMB
+            // Shoot
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, null);
+            }
+
+            // 1
+            // Change gun to 0
+            if (keyboardState.IsKeyDown(Keys.D1))
+            {
+                CurrentGun = 0;
+            }
+
+            // 2
+            // Change gun to 1
+            if (keyboardState.IsKeyDown(Keys.D2))
+            {
+                CurrentGun = 1;
+            }
+
+            // 3
+            // Change gun to 2
+            if (keyboardState.IsKeyDown(Keys.D3))
+            {
+                CurrentGun = 2;
+            }
+
+            // 4
+            // Change gun to 3
+            if (keyboardState.IsKeyDown(Keys.D4))
+            {
+                CurrentGun = 3;
+            }
+
+            // No keys
+            // Reset movement
             if (keyboardState.GetPressedKeyCount() == 0)
             {
                 isMoving = false;
@@ -129,6 +198,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             currentFrame++;
             if (currentFrame == totalFrames)
                 currentFrame = 0;
+
+            GunCooldown++;
         }
 
         public void Draw(SpriteBatch spriteBatch, MouseState mouseState)
@@ -149,7 +220,92 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             spriteBatch.Begin();
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
+
+            foreach (var mark in Hitmarks)
+            {
+                spriteBatch.Draw(HitmarkTexture, new Rectangle((int)mark.X, (int)mark.Y, 32, 32), Color.Red);
+            }
             spriteBatch.End();
+        }
+
+
+        public void Shoot(Vector2 sourcePosition, Vector2 destinationPosition, List<ICollidable> mapObjects, List<Rectangle> entities)
+        {
+            var rnd = new Random();                     // generator liczb losowych
+
+            // Sprawdz czy jest amunicja i czy można strzelić
+            if (!(GunInventory[CurrentGun].AmmoCount > 0) | !(GunCooldown > GunInventory[CurrentGun].RateOfFire))
+            {
+                return;
+            }
+
+            GunInventory[CurrentGun].AmmoCount -= 1;
+            GunCooldown = 0;
+
+            for (int i = 0; i < GunInventory[CurrentGun].PelletCount; i++)       // dla każdego pocisku
+            {
+                
+                float rndOffset = (float)rnd.Next(-GunInventory[CurrentGun].Spread, GunInventory[CurrentGun].Spread);     // Oblicz losowe odchylenie zgodne z Spread
+                float radRndOffset = (float)(rndOffset * (Math.PI / 180));
+                
+                float baseAngle = (float)Math.Atan2(destinationPosition.Y - sourcePosition.Y, destinationPosition.X - sourcePosition.X);        // Oblicz startowy kąt między pozycją gracza i myszki
+                
+                double shootAngle = baseAngle + radRndOffset;       // Oblicz kąt strzału z odchyleniem
+
+
+                // Sprawdzanie kolizji
+                bool colided = false;
+                bool outOfRange = false;
+                int distanceTravelled = 0;
+                double xToCheck = sourcePosition.X;
+                double yToCheck = sourcePosition.Y;
+                while (!colided & !outOfRange)
+                {
+                    foreach (var mapObj in mapObjects)
+                    {
+                        // Kolizja ze scianą, oknem, drzwiami
+                        if (mapObj.Hitbox.Contains((int)xToCheck, (int)yToCheck))
+                        {
+                            colided = true;
+                        }
+                    }
+
+                    if (!colided)
+                    {
+                        //foreach (var entity in entities)
+                        //{
+                        //    if (entity.Contains((int)xToCheck, (int)yToCheck))
+                        //    {
+                        //        //entity.Hurt(Damage);        // Dodać metode do przeciwników która odejmuje zdrowie
+                        //        colided = true;
+                        //        return;
+                        //    }
+                        //}
+                    }
+
+
+
+                    // Przesuń sprawdzany punkt
+                    if (!colided)
+                    {
+                        xToCheck = xToCheck + Math.Cos(shootAngle) * 2;
+                        yToCheck = yToCheck + Math.Sin(shootAngle) * 2;
+                    }
+
+                    // Sprawdz czy nie jest za ekranem
+                    if (xToCheck > 2000 | yToCheck > 2000 | xToCheck < 0 | yToCheck < 0)
+                    {
+                        outOfRange = true;
+                    }
+
+                    if (colided)
+                    {
+                        Hitmarks.Add(new Vector2((float)xToCheck - 16, (float)yToCheck - 16));
+                    }
+                }
+
+                
+            }
         }
     }
 }
