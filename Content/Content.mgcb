@@ -31,6 +31,12 @@
 /processorParam:TextureFormat=Color
 /build:Hitmark.png
 
+#begin MenuGry2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:MenuGry2.mp3
+
 #begin Player.png
 /importer:TextureImporter
 /processor:TextureProcessor

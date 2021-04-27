@@ -157,9 +157,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             // Shoot
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                //soundeffect
+                
                 Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, null);
-                Game1.soundEffects[0].Play();
             }
 
             // 1
@@ -248,7 +247,10 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             for (int i = 0; i < GunInventory[CurrentGun].PelletCount; i++)       // dla każdego pocisku
             {
+                //soundeffect.
                 
+                Game1.soundEffects[0].Play();
+
                 float rndOffset = (float)rnd.Next(-GunInventory[CurrentGun].Spread, GunInventory[CurrentGun].Spread);     // Oblicz losowe odchylenie zgodne z Spread
                 float radRndOffset = (float)(rndOffset * (Math.PI / 180));
                 

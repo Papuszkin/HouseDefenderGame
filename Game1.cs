@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Media;
+
 namespace HouseDefenderGame
 {
     public class Game1 : Game
@@ -21,7 +23,8 @@ namespace HouseDefenderGame
 
         private Player player;
 
-        public static List<SoundEffect> soundEffects;
+        protected Song song;
+        public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
         public Game1()
         {
@@ -42,6 +45,11 @@ namespace HouseDefenderGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            song = Content.Load<Song>("MenuGry2");
+            MediaPlayer.Play(song);
+            MediaPlayer.Volume = 0.2f;
+            MediaPlayer.IsRepeating = true;
 
             Texture2D wallTexture = Content.Load<Texture2D>("tempWallRepeating");
             Texture2D windowTexture = Content.Load<Texture2D>("tempWindow");
@@ -67,8 +75,9 @@ namespace HouseDefenderGame
             mapObjects.AddRange(houseWalls);
 
             //Muzyka Strzalu
+            SoundEffect.MasterVolume = 0.1f;
             soundEffects.Add(Content.Load<SoundEffect>("GunShot1"));
-
+            
             // TODO: use this.Content to load your game content here
         }
 
