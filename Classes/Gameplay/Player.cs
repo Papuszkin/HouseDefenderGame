@@ -27,7 +27,7 @@ namespace HouseDefenderGame.Classes.Gameplay
         private int currentFrame;
         private int totalFrames;
         private float playerSpeed = 200f;
-        private bool isMoving;
+        public bool isMoving;
 
         public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture)
         {
@@ -51,10 +51,12 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             Hitmarks = new List<Vector2>();
             HitmarkTexture = hitmarkTexture;
+
         }
 
         public void Update(KeyboardState keyboardState, GameTime gameTime, IEnumerable<ICollidable> collidables)
         {
+
             MouseState mouseState = Mouse.GetState();
 
             // W
