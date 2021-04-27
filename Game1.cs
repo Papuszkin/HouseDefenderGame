@@ -4,8 +4,8 @@ using HouseDefenderGame.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
-
 namespace HouseDefenderGame
 {
     public class Game1 : Game
@@ -20,6 +20,8 @@ namespace HouseDefenderGame
         public static List<ICollidable> mapObjects = new List<ICollidable>();
 
         private Player player;
+
+        public static List<SoundEffect> soundEffects;
 
         public Game1()
         {
@@ -62,8 +64,11 @@ namespace HouseDefenderGame
             houseWalls.Add(new Wall(300, 600, 900, true, wallTexture));
             houseWalls.Add(new Wall(300, 350, 250, false, wallTexture));
 
-
             mapObjects.AddRange(houseWalls);
+
+            //Muzyka Strzalu
+            soundEffects.Add(Content.Load<SoundEffect>("GunShot1"));
+
             // TODO: use this.Content to load your game content here
         }
 

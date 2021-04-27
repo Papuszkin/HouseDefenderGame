@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin GunShot1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:GunShot1.wav
+
 #begin Hitmark.png
 /importer:TextureImporter
 /processor:TextureProcessor

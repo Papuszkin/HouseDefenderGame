@@ -158,6 +158,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, null);
+                Game1.soundEffects[0].Play();
             }
 
             // 1
@@ -233,7 +234,7 @@ namespace HouseDefenderGame.Classes.Gameplay
 
         public void Shoot(Vector2 sourcePosition, Vector2 destinationPosition, List<ICollidable> mapObjects, List<Rectangle> entities)
         {
-            var rnd = new Random();                     // generator liczb losowych
+            var rnd = new Random();                     // generator liczb losowych (Dobrze że napisałeś, bo by sie nikt nie domyślił XD)
 
             // Sprawdz czy jest amunicja i czy można strzelić
             if (!(GunInventory[CurrentGun].AmmoCount > 0) | !(GunCooldown > GunInventory[CurrentGun].RateOfFire))
