@@ -157,7 +157,6 @@ namespace HouseDefenderGame.Classes.Gameplay
             // Shoot
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                //soundeffect
                 Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, null);
                 Game1.soundEffects[0].Play();
             }
