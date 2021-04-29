@@ -12,7 +12,7 @@ namespace HouseDefenderGame
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
+        public static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         private List<Wall> houseWalls = new List<Wall>();
@@ -22,6 +22,8 @@ namespace HouseDefenderGame
         public static List<ICollidable> mapObjects = new List<ICollidable>();
 
         private Player player;
+
+        private List<Zombie> zombie;
 
         protected Song song;
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
@@ -57,7 +59,12 @@ namespace HouseDefenderGame
 
             Texture2D playerTexture = Content.Load<Texture2D>("Player");
             Texture2D hitmarkTexture = Content.Load<Texture2D>("Hitmark");
+
             player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
+
+
+            
+            
             
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
             houseDoors.Add(new Door(400, 350, true, doorTexture));
@@ -117,6 +124,9 @@ namespace HouseDefenderGame
             // TODO: Add your drawing code here
 
             player.Draw(_spriteBatch, ms);
+
+
+
 
             base.Draw(gameTime);
         }

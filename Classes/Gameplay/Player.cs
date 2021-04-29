@@ -39,6 +39,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             totalFrames = Rows * Columns;
             isMoving = false;
 
+       
+
             GunInventory = new List<Gun> {
                 // Name Damage Pellets Spread RateOfFire
                 new Gun("Pistol", 5, 1, 5, 30),
@@ -68,7 +70,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle)|| Position.Y < 0)
                     {
                         movementPossible = false;
                         return;
@@ -91,7 +93,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) || Position.Y > Game1._graphics.PreferredBackBufferHeight)
                     {
                         movementPossible = false;
                         return;
@@ -114,7 +116,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) || Position.X < 0)
                     {
                         movementPossible = false;
                         return;
@@ -138,7 +140,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) || Position.X >= Game1._graphics.PreferredBackBufferWidth)
                     {
                         movementPossible = false;
                         return;
@@ -234,7 +236,7 @@ namespace HouseDefenderGame.Classes.Gameplay
 
         public void Shoot(Vector2 sourcePosition, Vector2 destinationPosition, List<ICollidable> mapObjects, List<Rectangle> entities)
         {
-            var rnd = new Random();                     // generator liczb losowych (Dobrze że napisałeś, bo by sie nikt nie domyślił XD)
+            var rnd = new Random();                     // generator liczb losowych
 
             // Sprawdz czy jest amunicja i czy można strzelić
             if (!(GunInventory[CurrentGun].AmmoCount > 0) | !(GunCooldown > GunInventory[CurrentGun].RateOfFire))
@@ -247,9 +249,9 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             for (int i = 0; i < GunInventory[CurrentGun].PelletCount; i++)       // dla każdego pocisku
             {
-                //soundeffect.
                 
-                Game1.soundEffects[0].Play();
+                
+                Game1.soundEffects[0].Play(); //dzwiek strzalu
 
                 float rndOffset = (float)rnd.Next(-GunInventory[CurrentGun].Spread, GunInventory[CurrentGun].Spread);     // Oblicz losowe odchylenie zgodne z Spread
                 float radRndOffset = (float)(rndOffset * (Math.PI / 180));
