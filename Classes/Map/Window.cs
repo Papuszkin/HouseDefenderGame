@@ -39,6 +39,15 @@ namespace HouseDefenderGame.Classes.Map
             Health = STARTING_HEALTH;
             IsCollidable = STARTING_COLLISION;
             CurrentState = STARTING_STATE;
+
+            if (isHorizontal)
+            {
+                Hitbox = new Rectangle(x, Y, WINDOW_WIDTH, WINDOW_HEIGHT);
+            }
+            else
+            {
+                Hitbox = new Rectangle(x, Y, WINDOW_HEIGHT, WINDOW_WIDTH);
+            }
         }
 
         public void Draw(SpriteBatch sb)
