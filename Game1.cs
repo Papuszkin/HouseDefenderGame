@@ -20,6 +20,7 @@ namespace HouseDefenderGame
         private List<Door> houseDoors = new List<Door>();
 
         public static List<ICollidable> mapObjects = new List<ICollidable>();
+        public static List<IHurtable> entities = new List<IHurtable>();
 
         private Player player;
 
@@ -73,6 +74,7 @@ namespace HouseDefenderGame
             houseWalls.Add(new Wall(300, 350, 250, false, wallTexture));
 
             mapObjects.AddRange(houseWalls);
+            entities.AddRange(houseWindows);
 
             //Muzyka Strzalu
             SoundEffect.MasterVolume = 0.1f;
