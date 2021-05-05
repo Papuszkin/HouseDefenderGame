@@ -23,7 +23,7 @@ namespace HouseDefenderGame
 
         private Player player;
 
-        private List<Zombie> zombie;
+        private Zombie zombie;
 
         protected Song song;
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
@@ -58,11 +58,12 @@ namespace HouseDefenderGame
             Texture2D doorTexture = Content.Load<Texture2D>("tempDoor");
 
             Texture2D playerTexture = Content.Load<Texture2D>("Player");
+            Texture2D zombieTexture = Content.Load<Texture2D>("SmallZombie");
             Texture2D hitmarkTexture = Content.Load<Texture2D>("Hitmark");
 
             player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
 
-
+            zombie = new Zombie(zombieTexture, new Vector2(120, 120), 1, 3, hitmarkTexture);
             
             
             
@@ -97,6 +98,7 @@ namespace HouseDefenderGame
 
             // TODO: Add your update logic here
             player.Update(ks, gameTime, houseWalls);
+            zombie.Update(ks, gameTime, houseWalls);
 
             base.Update(gameTime);
         }
@@ -125,7 +127,7 @@ namespace HouseDefenderGame
 
             player.Draw(_spriteBatch, ms);
 
-
+            zombie.Draw(_spriteBatch);
 
 
             base.Draw(gameTime);

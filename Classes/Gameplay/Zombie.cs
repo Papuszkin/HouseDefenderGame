@@ -24,11 +24,11 @@ namespace HouseDefenderGame.Classes.Gameplay
         public bool isMoving;
 
         private float damage = 5;
-        private float zombieSpeed = 200f;
+        private float zombieSpeed = 20f;
         private int health = 100;
 
 
-        public Zombie(Texture2D texture, Vector2 position, int rows, int columns)
+        public Zombie(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture)
         {
             Texture = texture;
             Position = position;
@@ -43,6 +43,8 @@ namespace HouseDefenderGame.Classes.Gameplay
         public void Draw(SpriteBatch spriteBatch)
         {
             Vector2 playerPosition = new Vector2(Position.X, Position.Y);
+
+            
             Vector2 dPos = Position - playerPosition;
             Rotation = (float)Math.Atan2(dPos.Y, dPos.X);
 
@@ -60,6 +62,19 @@ namespace HouseDefenderGame.Classes.Gameplay
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
 
             spriteBatch.End();
+        }
+
+        public void Update(KeyboardState keyboardState, GameTime gameTime, IEnumerable<ICollidable> collidables)
+        {
+            var rnd = new Random();
+            Vector2 newPosiiton = new Vector2(Position.X, Position.Y - zombieSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            Position.X = zombieSpeed + rnd.Next(1,12);
+            Position.Y = zombieSpeed + rnd.Next(1,12);
+            currentFrame++;
+            if (currentFrame == totalFrames)
+                currentFrame = 0;
+
+            
         }
     }
 }
