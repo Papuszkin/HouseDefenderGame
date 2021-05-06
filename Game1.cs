@@ -12,18 +12,21 @@ namespace HouseDefenderGame
 {
     public class Game1 : Game
     {
+        private FrameCounter _frameCounter = new FrameCounter();
         public static GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SpriteFont _spriteFont;
 
         private List<Wall> houseWalls = new List<Wall>();
         private List<Window> houseWindows = new List<Window>();
         private List<Door> houseDoors = new List<Door>();
 
+
         public static List<ICollidable> mapObjects = new List<ICollidable>();
 
-        private Player player;
+        public static Player player;
 
-        private Zombie zombie;
+        public static Zombie zombie;
 
         protected Song song;
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
@@ -47,6 +50,8 @@ namespace HouseDefenderGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _spriteFont = Content.Load<SpriteFont>("Coordinates");
 
             song = Content.Load<Song>("MenuGry2");
             MediaPlayer.Play(song);
@@ -98,6 +103,7 @@ namespace HouseDefenderGame
 
             // TODO: Add your update logic here
             player.Update(ks, gameTime, houseWalls);
+
             zombie.Update(ks, gameTime, houseWalls);
 
             base.Update(gameTime);
@@ -129,7 +135,19 @@ namespace HouseDefenderGame
 
             zombie.Draw(_spriteBatch);
 
+            //FPS counter and coordinates
+            var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            _frameCounter.Update(deltaTime);
+
+            var fps = string.Format("FPS: {0}", _frameCounter.AverageFramesPerSecond);
+
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_spriteFont,fps, new Vector2(1100,10),Color.Black);
+            _spriteBatch.DrawString(_spriteFont, $"X:{player.Position.X}\nY:{player.Position.Y}", new Vector2(1100, 30), Color.Black);
+            _spriteBatch.End();
+
+            //end of fps counter and coordinates
             base.Draw(gameTime);
         }
     }

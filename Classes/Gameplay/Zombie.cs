@@ -42,10 +42,10 @@ namespace HouseDefenderGame.Classes.Gameplay
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 playerPosition = new Vector2(Position.X, Position.Y);
+            Vector2 zombiePosition = new Vector2(Position.X, Position.Y);
 
             
-            Vector2 dPos = Position - playerPosition;
+            Vector2 dPos = Position - zombiePosition;
             Rotation = (float)Math.Atan2(dPos.Y, dPos.X);
 
             int width = Texture.Width / Columns;
@@ -67,7 +67,9 @@ namespace HouseDefenderGame.Classes.Gameplay
         public void Update(KeyboardState keyboardState, GameTime gameTime, IEnumerable<ICollidable> collidables)
         {
             var rnd = new Random();
-            Vector2 newPosiiton = new Vector2(Position.X, Position.Y - zombieSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            var delta = new Vector2(Position.X, Position.Y);
+            
+            
             Position.X = zombieSpeed + rnd.Next(1,12);
             Position.Y = zombieSpeed + rnd.Next(1,12);
             currentFrame++;

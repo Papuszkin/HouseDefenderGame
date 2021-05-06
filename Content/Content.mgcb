@@ -25,6 +25,13 @@
 /processorParam:TextureFormat=Color
 /build:BossZombie.png
 
+#begin Coordinates.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Coordinates.spritefont
+
 #begin GunShot1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
