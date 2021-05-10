@@ -68,7 +68,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) && item.IsSolid)
                     {
                         movementPossible = false;
                         return;
@@ -91,7 +91,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) && item.IsSolid)
                     {
                         movementPossible = false;
                         return;
@@ -114,7 +114,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) && item.IsSolid)
                     {
                         movementPossible = false;
                         return;
@@ -138,7 +138,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                 bool movementPossible = true;
                 foreach (var item in collidables)
                 {
-                    if (item.Hitbox.Intersects(newRectangle))
+                    if (item.Hitbox.Intersects(newRectangle) && item.IsSolid)
                     {
                         movementPossible = false;
                         return;
@@ -158,7 +158,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 
-                Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, null);
+                Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, Game1.entities);
             }
 
             // 1
@@ -232,9 +232,9 @@ namespace HouseDefenderGame.Classes.Gameplay
         }
 
 
-        public void Shoot(Vector2 sourcePosition, Vector2 destinationPosition, List<ICollidable> mapObjects, List<Rectangle> entities)
+        public void Shoot(Vector2 sourcePosition, Vector2 destinationPosition, List<ICollidable> mapObjects, List<IEntity> entities)
         {
-            var rnd = new Random();                     // generator liczb losowych (Dobrze że napisałeś, bo by sie nikt nie domyślił XD)
+            var rnd = new Random();                     // generator liczb losowych
 
             // Sprawdz czy jest amunicja i czy można strzelić
             if (!(GunInventory[CurrentGun].AmmoCount > 0) | !(GunCooldown > GunInventory[CurrentGun].RateOfFire))
@@ -265,28 +265,30 @@ namespace HouseDefenderGame.Classes.Gameplay
                 int distanceTravelled = 0;
                 double xToCheck = sourcePosition.X;
                 double yToCheck = sourcePosition.Y;
+
                 while (!colided & !outOfRange)
                 {
                     foreach (var mapObj in mapObjects)
                     {
                         // Kolizja ze scianą, oknem, drzwiami
-                        if (mapObj.Hitbox.Contains((int)xToCheck, (int)yToCheck))
+                        if (mapObj.Hitbox.Contains((int)xToCheck, (int)yToCheck) && mapObj.IsSolid)
                         {
+                            colided = true;
+                        }
+                    }
+
+                    foreach (var entity in entities)
+                    {
+                        if (entity.Hitbox.Contains((int)xToCheck, (int)yToCheck) && entity.IsSolid)
+                        {
+                            entity.Hurt(GunInventory[CurrentGun].Damage);        // Dodać metode do przeciwników która odejmuje zdrowie
                             colided = true;
                         }
                     }
 
                     if (!colided)
                     {
-                        //foreach (var entity in entities)
-                        //{
-                        //    if (entity.Contains((int)xToCheck, (int)yToCheck))
-                        //    {
-                        //        //entity.Hurt(Damage);        // Dodać metode do przeciwników która odejmuje zdrowie
-                        //        colided = true;
-                        //        return;
-                        //    }
-                        //}
+                        
                     }
 
 

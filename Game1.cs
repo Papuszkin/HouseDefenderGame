@@ -20,7 +20,7 @@ namespace HouseDefenderGame
         private List<Door> houseDoors = new List<Door>();
 
         public static List<ICollidable> mapObjects = new List<ICollidable>();
-        public static List<IHurtable> entities = new List<IHurtable>();
+        public static List<IEntity> entities = new List<IEntity>();
 
         private Player player;
 
@@ -54,6 +54,7 @@ namespace HouseDefenderGame
 
             Texture2D wallTexture = Content.Load<Texture2D>("tempWallRepeating");
             Texture2D windowTexture = Content.Load<Texture2D>("tempWindow");
+            Texture2D windowTextureVertical = Content.Load<Texture2D>("tempWindowVertical");
             Texture2D doorTexture = Content.Load<Texture2D>("tempDoor");
 
             Texture2D playerTexture = Content.Load<Texture2D>("Player");
@@ -66,7 +67,7 @@ namespace HouseDefenderGame
             houseWindows.Add(new Window(700, 350, true, windowTexture));
             houseWalls.Add(new Wall(828, 350, 100, true, wallTexture));
             houseWalls.Add(new Wall(900, 328, 54, false, wallTexture));
-            houseWindows.Add(new Window(900, 200, false, windowTexture));
+            houseWindows.Add(new Window(900, 200, false, windowTextureVertical));
             houseWalls.Add(new Wall(900, 150, 50, false, wallTexture));
             houseWalls.Add(new Wall(900, 150, 300, true, wallTexture));
             houseWalls.Add(new Wall(1168, 150, 450, false, wallTexture));
@@ -74,6 +75,7 @@ namespace HouseDefenderGame
             houseWalls.Add(new Wall(300, 350, 250, false, wallTexture));
 
             mapObjects.AddRange(houseWalls);
+            mapObjects.AddRange(houseWindows);
             entities.AddRange(houseWindows);
 
             //Muzyka Strzalu
@@ -91,7 +93,7 @@ namespace HouseDefenderGame
                 Exit();
 
             // TODO: Add your update logic here
-            player.Update(ks, gameTime, houseWalls);
+            player.Update(ks, gameTime, mapObjects);
 
             base.Update(gameTime);
         }

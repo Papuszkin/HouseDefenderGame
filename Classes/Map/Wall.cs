@@ -22,6 +22,7 @@ namespace HouseDefenderGame.Classes.Map
         public Color TransparencyColor { get; set; }
 
         public Rectangle Hitbox { get; set; }
+        public bool IsSolid { get; set; }
 
         public Wall(int x, int y, int lenght, bool isHorizontal, Texture2D wallTexture)
         {
@@ -31,6 +32,7 @@ namespace HouseDefenderGame.Classes.Map
             IsHorizontal = isHorizontal;
             WallTexture = wallTexture;
             TransparencyColor = Color.White;
+            IsSolid = true;
 
             if (isHorizontal)
             {

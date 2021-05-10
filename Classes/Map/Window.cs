@@ -7,7 +7,7 @@ using System.Text;
 
 namespace HouseDefenderGame.Classes.Map
 {
-    public class Window : IHurtable, ICollidable
+    public class Window : IEntity
     {
         static int WINDOW_WIDTH = 128;
         static int WINDOW_HEIGHT = 32;
@@ -28,6 +28,7 @@ namespace HouseDefenderGame.Classes.Map
 
         public int Health { get; set; }
         public Rectangle Hitbox { get; set; }
+        public bool IsSolid { get; set; }
 
         public Window(int x, int y, bool isHorizontal, Texture2D windowTexture)
         {
@@ -39,6 +40,7 @@ namespace HouseDefenderGame.Classes.Map
             Health = STARTING_HEALTH;
             IsCollidable = STARTING_COLLISION;
             CurrentState = STARTING_STATE;
+            IsSolid = true;
 
             if (isHorizontal)
             {
@@ -59,7 +61,7 @@ namespace HouseDefenderGame.Classes.Map
                 sb.Draw(
                 WindowTexture,
                 new Rectangle(X, Y, WINDOW_WIDTH, WINDOW_HEIGHT),
-                new Rectangle(CurrentState * WINDOW_HEIGHT, CurrentState * WINDOW_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT),
+                new Rectangle(CurrentState * WINDOW_WIDTH, 0, WINDOW_WIDTH, WINDOW_HEIGHT),
                 TransparencyColor
                 );
             }
@@ -68,7 +70,7 @@ namespace HouseDefenderGame.Classes.Map
                 sb.Draw(
                 WindowTexture,
                 new Rectangle(X, Y, WINDOW_HEIGHT, WINDOW_WIDTH),
-                new Rectangle(CurrentState * WINDOW_HEIGHT, CurrentState * WINDOW_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT),
+                new Rectangle(CurrentState * WINDOW_HEIGHT, 0, WINDOW_HEIGHT, WINDOW_WIDTH),
                 TransparencyColor
                 );
             }
@@ -82,6 +84,7 @@ namespace HouseDefenderGame.Classes.Map
             {
                 Health = 0;
                 CurrentState = 1;
+                IsSolid = false;
             }
         }
     }

@@ -8,5 +8,6 @@ namespace HouseDefenderGame.Interfaces
     public interface ICollidable
     {
         public Rectangle Hitbox { get; set; }
+        public bool IsSolid { get; set; }
     }
 }

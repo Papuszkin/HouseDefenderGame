@@ -4,11 +4,7 @@ using System.Text;
 
 namespace HouseDefenderGame.Interfaces
 {
-    public interface IHurtable
+    public interface IEntity : ICollidable, IHurtable
     {
-        public int Health { get; set; } 
-
-        public void Hurt(int damage);
-        
     }
 }
