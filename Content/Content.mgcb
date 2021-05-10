@@ -157,7 +157,8 @@
 /processorParam:TextureFormat=Color
 /build:tempWindow.png
 
-#begin Window.png
+
+#begin tempWindowVertical.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,7 +168,8 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Window.png
+/build:tempWindowVertical.png
+
 
 #begin Zombie1.png
 /importer:TextureImporter

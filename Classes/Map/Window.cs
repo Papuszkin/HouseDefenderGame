@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using HouseDefenderGame.Interfaces;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace HouseDefenderGame.Classes.Map
 {
-    public class Window
+    public class Window : IEntity
     {
         static int WINDOW_WIDTH = 128;
         static int WINDOW_HEIGHT = 32;
@@ -22,9 +23,12 @@ namespace HouseDefenderGame.Classes.Map
         public Texture2D WindowTexture { get; set; }
         public Color TransparencyColor { get; set; }
 
-        public int CurrentHealth { get; set; }
         public bool IsCollidable { get; set; }
         public int CurrentState { get; set; }
+
+        public int Health { get; set; }
+        public Rectangle Hitbox { get; set; }
+        public bool IsSolid { get; set; }
 
         public Window(int x, int y, bool isHorizontal, Texture2D windowTexture)
         {
@@ -33,9 +37,19 @@ namespace HouseDefenderGame.Classes.Map
             IsHorizontal = isHorizontal;
             WindowTexture = windowTexture;
             TransparencyColor = Color.White;
-            CurrentHealth = STARTING_HEALTH;
+            Health = STARTING_HEALTH;
             IsCollidable = STARTING_COLLISION;
             CurrentState = STARTING_STATE;
+            IsSolid = true;
+
+            if (isHorizontal)
+            {
+                Hitbox = new Rectangle(x, Y, WINDOW_WIDTH, WINDOW_HEIGHT);
+            }
+            else
+            {
+                Hitbox = new Rectangle(x, Y, WINDOW_HEIGHT, WINDOW_WIDTH);
+            }
         }
 
         public void Draw(SpriteBatch sb)
@@ -47,7 +61,7 @@ namespace HouseDefenderGame.Classes.Map
                 sb.Draw(
                 WindowTexture,
                 new Rectangle(X, Y, WINDOW_WIDTH, WINDOW_HEIGHT),
-                new Rectangle(CurrentState * WINDOW_HEIGHT, CurrentState * WINDOW_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT),
+                new Rectangle(CurrentState * WINDOW_WIDTH, 0, WINDOW_WIDTH, WINDOW_HEIGHT),
                 TransparencyColor
                 );
             }
@@ -56,11 +70,22 @@ namespace HouseDefenderGame.Classes.Map
                 sb.Draw(
                 WindowTexture,
                 new Rectangle(X, Y, WINDOW_HEIGHT, WINDOW_WIDTH),
-                new Rectangle(CurrentState * WINDOW_HEIGHT, CurrentState * WINDOW_WIDTH, WINDOW_WIDTH, WINDOW_HEIGHT),
+                new Rectangle(CurrentState * WINDOW_HEIGHT, 0, WINDOW_HEIGHT, WINDOW_WIDTH),
                 TransparencyColor
                 );
             }
             sb.End();
+        }
+
+        public void Hurt(int damage)
+        {
+            Health = Health - damage;
+            if (Health <= 0)
+            {
+                Health = 0;
+                CurrentState = 1;
+                IsSolid = false;
+            }
         }
     }
 }
