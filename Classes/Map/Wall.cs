@@ -46,7 +46,7 @@ namespace HouseDefenderGame.Classes.Map
 
         public void Draw(SpriteBatch sb)
         {
-            sb.Begin();
+            
 
             if (IsHorizontal)
             {
@@ -56,7 +56,7 @@ namespace HouseDefenderGame.Classes.Map
             {
                 sb.Draw(WallTexture, new Rectangle(X, Y, WALL_THICKNESS, Lenght), new Rectangle(0, 0, WALL_THICKNESS, Lenght), TransparencyColor);
             }
-            sb.End();
+            
         }
     }
 }

@@ -54,7 +54,7 @@ namespace HouseDefenderGame.Classes.Map
 
         public void Draw(SpriteBatch sb)
         {
-            sb.Begin();
+            
 
             if (IsHorizontal)
             {
@@ -74,7 +74,7 @@ namespace HouseDefenderGame.Classes.Map
                 TransparencyColor
                 );
             }
-            sb.End();
+            
         }
 
         public void Hurt(int damage)
