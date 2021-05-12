@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HouseDefenderGame.Interfaces;
+using HouseDefenderGame.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -158,7 +159,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 
-                Shoot(Position, mouseState.Position.ToVector2(), Game1.mapObjects, Game1.entities);
+                Shoot(Position, mouseState.Position.ToVector2(), GameState.mapObjects, GameState.entities);
             }
 
             // 1
@@ -221,14 +222,14 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             Vector2 origin = new Vector2(width / 2, height / 2);
 
-            spriteBatch.Begin();
+            
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
 
             foreach (var mark in Hitmarks)
             {
                 spriteBatch.Draw(HitmarkTexture, new Rectangle((int)mark.X, (int)mark.Y, 32, 32), Color.Red);
             }
-            spriteBatch.End();
+            
         }
 
 
@@ -249,7 +250,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             {
                 //soundeffect.
                 
-                Game1.soundEffects[0].Play();
+                GameState.soundEffects[0].Play();
 
                 float rndOffset = (float)rnd.Next(-GunInventory[CurrentGun].Spread, GunInventory[CurrentGun].Spread);     // Oblicz losowe odchylenie zgodne z Spread
                 float radRndOffset = (float)(rndOffset * (Math.PI / 180));

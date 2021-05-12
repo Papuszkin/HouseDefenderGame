@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
+using HouseDefenderGame.States;
 
 namespace HouseDefenderGame
 {
@@ -14,19 +15,16 @@ namespace HouseDefenderGame
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
-        private List<Wall> houseWalls = new List<Wall>();
-        private List<Window> houseWindows = new List<Window>();
-        private List<Door> houseDoors = new List<Door>();
-
-        public static List<ICollidable> mapObjects = new List<ICollidable>();
-        public static List<IEntity> entities = new List<IEntity>();
-
-        private Player player;
-
         protected Song song;
-        public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
+        private State _currentState;
+
+        private State _nextState;
+
+        public void ChangeState(State state)
+        {
+            _nextState = state;
+        }
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -45,83 +43,46 @@ namespace HouseDefenderGame
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             song = Content.Load<Song>("MenuGry2");
             MediaPlayer.Play(song);
             MediaPlayer.Volume = 0.2f;
             MediaPlayer.IsRepeating = true;
 
-            Texture2D wallTexture = Content.Load<Texture2D>("tempWallRepeating");
-            Texture2D windowTexture = Content.Load<Texture2D>("tempWindow");
-            Texture2D windowTextureVertical = Content.Load<Texture2D>("tempWindowVertical");
-            Texture2D doorTexture = Content.Load<Texture2D>("tempDoor");
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+            _currentState.LoadContent();
+            _nextState = null;
 
-            Texture2D playerTexture = Content.Load<Texture2D>("Player");
-            Texture2D hitmarkTexture = Content.Load<Texture2D>("Hitmark");
-            player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
-            
-            houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
-            houseDoors.Add(new Door(400, 350, true, doorTexture));
-            houseWalls.Add(new Wall(528, 350, 172, true, wallTexture));
-            houseWindows.Add(new Window(700, 350, true, windowTexture));
-            houseWalls.Add(new Wall(828, 350, 100, true, wallTexture));
-            houseWalls.Add(new Wall(900, 328, 54, false, wallTexture));
-            houseWindows.Add(new Window(900, 200, false, windowTextureVertical));
-            houseWalls.Add(new Wall(900, 150, 50, false, wallTexture));
-            houseWalls.Add(new Wall(900, 150, 300, true, wallTexture));
-            houseWalls.Add(new Wall(1168, 150, 450, false, wallTexture));
-            houseWalls.Add(new Wall(300, 600, 900, true, wallTexture));
-            houseWalls.Add(new Wall(300, 350, 250, false, wallTexture));
-
-            mapObjects.AddRange(houseWalls);
-            mapObjects.AddRange(houseWindows);
-            entities.AddRange(houseWindows);
-
-            //Muzyka Strzalu
-            SoundEffect.MasterVolume = 0.1f;
-            soundEffects.Add(Content.Load<SoundEffect>("GunShot1"));
-            
             // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState ks = Keyboard.GetState();
+            if (_nextState != null)
+            {
+                _currentState = _nextState;
+                _currentState.LoadContent();
+                _nextState = null;
+            }
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            _currentState.Update(gameTime);
 
-            // TODO: Add your update logic here
-            player.Update(ks, gameTime, mapObjects);
+            _currentState.PostUpdate(gameTime);
+
+
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            MouseState ms = Mouse.GetState();
+
 
             GraphicsDevice.Clear(Color.DarkGreen);
 
-            foreach (var wall in houseWalls)
-            {
-                wall.Draw(_spriteBatch);
-            }
+            _currentState.Draw(gameTime, _spriteBatch);
 
-            foreach (var window in houseWindows)
-            {
-                window.Draw(_spriteBatch);
-            }
-
-            foreach (var door in houseDoors)
-            {
-                door.Draw(_spriteBatch);
-            }
             // TODO: Add your drawing code here
-
-            player.Draw(_spriteBatch, ms);
-
             base.Draw(gameTime);
         }
     }
