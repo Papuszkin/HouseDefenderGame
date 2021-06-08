@@ -28,8 +28,8 @@ namespace HouseDefenderGame.States
         public static List<IEntity> entities = new List<IEntity>();
 
         private Player player;
+        private static Zombie zombie;
 
-       
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
 
@@ -51,8 +51,10 @@ namespace HouseDefenderGame.States
             Texture2D doorTexture = _content.Load<Texture2D>("tempDoor");
 
             Texture2D playerTexture = _content.Load<Texture2D>("Player");
+            Texture2D zombieTexture = _content.Load<Texture2D>("Zombie1");
             Texture2D hitmarkTexture = _content.Load<Texture2D>("Hitmark");
             player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
+            zombie = new Zombie(zombieTexture, new Vector2(120, 120), 1, 3);
 
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
             houseDoors.Add(new Door(400, 350, true, doorTexture));
@@ -71,7 +73,7 @@ namespace HouseDefenderGame.States
             mapObjects.AddRange(houseWindows);
             entities.AddRange(houseWindows);
 
-            //Muzyka Strzalu
+            //Dzwiek Strzalu
             SoundEffect.MasterVolume = 0.1f;
             soundEffects.Add(_content.Load<SoundEffect>("GunShot1"));
 
@@ -88,7 +90,7 @@ namespace HouseDefenderGame.States
 
             // TODO: Add your update logic here
             player.Update(ks, gameTime, mapObjects);
-
+            zombie.Update(mapObjects);
 
             PostUpdate(gameTime);
 
@@ -124,6 +126,7 @@ namespace HouseDefenderGame.States
                 door.Draw(spriteBatch);
             }
             player.Draw(spriteBatch, ms);
+            zombie.Draw(spriteBatch,ms);
 
             spriteBatch.End();
         }
