@@ -49,7 +49,7 @@ namespace HouseDefenderGame.States
         }
         public override void LoadContent()
         {
-            menuBackGroundTexture = _content.Load<Texture2D>("MainMenu");
+            menuBackGroundTexture = _content.Load<Texture2D>("MainMenu1");
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
