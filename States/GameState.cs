@@ -72,6 +72,7 @@ namespace HouseDefenderGame.States
 
             mapObjects.AddRange(houseWalls);
             mapObjects.AddRange(houseWindows);
+            entities.AddRange(houseWindows);
             entities.AddRange(zombies);
 
             //Dzwiek Strzalu
@@ -136,7 +137,7 @@ namespace HouseDefenderGame.States
             {
                 if (zombie.IsSolid)
                 {
-                    zombie.Draw(spriteBatch, ms);
+                    zombie.Draw(spriteBatch,player.Position);
                 }
 	           
             }

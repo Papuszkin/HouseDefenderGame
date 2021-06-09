@@ -45,7 +45,6 @@ namespace HouseDefenderGame.Classes.Gameplay
             IsSolid = true;
             Health = 20;
             zombieSpeed = speed;
-            Hitbox = new Rectangle(X, Y, texture.Width, texture.Height);
         }
 
         public void Update(IEnumerable<ICollidable> collidables)
@@ -57,31 +56,31 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             if (Position.X > playerPosition.X)
             {
-                Position.X -= zombieSpeed / 10; 
+                Position.X -= zombieSpeed / 12;
             }
-            if (Position.Y>playerPosition.Y)
+            if (Position.Y > playerPosition.Y)
             {
-                Position.Y -= zombieSpeed / 10;
+                Position.Y -= zombieSpeed / 12;
             }
-            if (Position.X<=playerPosition.X)
+            if (Position.X <= playerPosition.X)
             {
-                Position.X += zombieSpeed / 10;
+                Position.X += zombieSpeed / 12;
             }
-            if (Position.Y<=playerPosition.Y)
+            if (Position.Y <= playerPosition.Y)
             {
-                Position.Y += zombieSpeed / 10;
+                Position.Y += zombieSpeed / 12;
             }
+
+            Hitbox = new Rectangle((int)Position.X-16, (int)Position.Y-16,32, 32);
 
             currentFrame++;
             if (currentFrame == totalFrames)
                 currentFrame = 0;
         }
 
-        public void Draw(SpriteBatch spriteBatch, MouseState mouseState)
+        public void Draw(SpriteBatch spriteBatch, Vector2 playerPosition)
         {
-            Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
-            Vector2 dPos = Position - mousePosition;
-            Rotation = (float)Math.Atan2(dPos.Y, dPos.X);
+            Rotation = (float)Math.Atan2(playerPosition.X,playerPosition.Y);
 
             int width = Texture.Width / Columns;
             int height = Texture.Height / Rows;

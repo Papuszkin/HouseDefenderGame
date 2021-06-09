@@ -269,15 +269,6 @@ namespace HouseDefenderGame.Classes.Gameplay
 
                 while (!colided & !outOfRange)
                 {
-                    foreach (var mapObj in mapObjects)
-                    {
-                        // Kolizja ze scianą, oknem, drzwiami
-                        if (mapObj.Hitbox.Contains((int)xToCheck, (int)yToCheck) && mapObj.IsSolid)
-                        {
-                            colided = true;
-                        }
-                    }
-
                     foreach (var entity in entities)
                     {
                         if (entity.Hitbox.Contains((int)xToCheck, (int)yToCheck) && entity.IsSolid)
@@ -287,11 +278,20 @@ namespace HouseDefenderGame.Classes.Gameplay
                         }
                     }
 
+                    foreach (var mapObj in mapObjects)
+                    {
+                        // Kolizja ze scianą, oknem, drzwiami
+                        if (mapObj.Hitbox.Contains((int)xToCheck, (int)yToCheck) && mapObj.IsSolid)
+                        {
+                            
+                            colided = true;
+                        }
+                    }
                     // Przesuń sprawdzany punkt
                     if (!colided)
                     {
-                        xToCheck = xToCheck + Math.Cos(shootAngle) * 2;
-                        yToCheck = yToCheck + Math.Sin(shootAngle) * 2;
+                        xToCheck = xToCheck + Math.Cos(shootAngle) * 1.02;
+                        yToCheck = yToCheck + Math.Sin(shootAngle) * 1.02;
                     }
 
                     // Sprawdz czy nie jest za ekranem
