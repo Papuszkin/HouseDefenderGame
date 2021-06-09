@@ -21,7 +21,12 @@ namespace HouseDefenderGame.Classes.Gameplay
         public List<Gun> GunInventory { get; set; }
         public int CurrentGun { get; set; }
         public int GunCooldown { get; set; }
+
         public Queue<Vector2> HM { get; set; }
+
+        public int Money { get; set; }
+
+     
         public Texture2D HitmarkTexture { get; set; }
 
         private int currentFrame;
@@ -48,6 +53,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             };
             CurrentGun = 0;
             GunCooldown = 0;
+            Money = 20;
 
             HitmarkTexture = hitmarkTexture;
 
@@ -296,6 +302,7 @@ namespace HouseDefenderGame.Classes.Gameplay
                     {
                         xToCheck = xToCheck + Math.Cos(shootAngle) * 1.02;
                         yToCheck = yToCheck + Math.Sin(shootAngle) * 1.02;
+
                     }
 
                     // Sprawdz czy nie jest za ekranem

@@ -29,6 +29,7 @@ namespace HouseDefenderGame.States
         public static List<IEntity> entities = new List<IEntity>();
 
         public static Player player;
+        public static Shop houseShop;
 
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
@@ -79,6 +80,10 @@ namespace HouseDefenderGame.States
             SoundEffect.MasterVolume = 0.1f;
             soundEffects.Add(_content.Load<SoundEffect>("GunShot1"));
 
+            // Sklep
+            Texture2D shopTexture = _content.Load<Texture2D>("Shop");
+            houseShop = new Shop(new Vector2(1100, 180), 0f, shopTexture);
+
         }
 
 
@@ -88,8 +93,6 @@ namespace HouseDefenderGame.States
                 _game.ChangeState(new MenuState(_game, _graphicsDevice, _content));
             KeyboardState ks = Keyboard.GetState();
 
-
-
             // TODO: Add your update logic here
             player.Update(ks, gameTime, mapObjects);
 
@@ -97,6 +100,11 @@ namespace HouseDefenderGame.States
             {
                 zombie.Update(entities);
             }
+            
+            // TODO: Add your update logic here
+            player.Update(ks, gameTime, mapObjects);
+
+            houseShop.Update(ks);
 
             PostUpdate(gameTime);
 
@@ -146,6 +154,8 @@ namespace HouseDefenderGame.States
 
 
             spriteBatch.End();
+
+            houseShop.Draw(spriteBatch);
         }
 
     }
