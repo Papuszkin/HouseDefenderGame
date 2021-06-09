@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace HouseDefenderGame.Classes.Gameplay
 {
-    public class Player
+    public class Player : IEntity
     {
         public Texture2D Texture { get; set; }
         public int Rows { get; set; }
@@ -25,16 +25,20 @@ namespace HouseDefenderGame.Classes.Gameplay
         public Queue<Vector2> HM { get; set; }
 
         public int Money { get; set; }
-
+        public Rectangle rectangle;
+      
      
         public Texture2D HitmarkTexture { get; set; }
+        public Rectangle Hitbox { get; set; }
+        public bool IsSolid { get; set; }
+        public int Health { get; set; }
 
         private int currentFrame;
         private int totalFrames;
         private float playerSpeed = 200f;
         public bool isMoving;
-
-        public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture)
+        
+        public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture, int newhealth)
         {
             Texture = texture;
             Position = position;
@@ -56,6 +60,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             Money = 20;
 
             HitmarkTexture = hitmarkTexture;
+            Health = newhealth;
 
         }
 
@@ -63,7 +68,8 @@ namespace HouseDefenderGame.Classes.Gameplay
         {
 
             MouseState mouseState = Mouse.GetState();
-
+            Hitbox = new Rectangle((int)Position.X-16, (int)Position.Y-16, 32, 32);
+            rectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
             // W
             // Move up
             if (keyboardState.IsKeyDown(Keys.W))
@@ -231,9 +237,9 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             Vector2 origin = new Vector2(width / 2, height / 2);
 
-
-            spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
-
+            
+                spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
+            
 
             foreach (var mark in HM)
             {
@@ -319,6 +325,11 @@ namespace HouseDefenderGame.Classes.Gameplay
 
 
             }
+        }
+
+        public void Hurt(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }
