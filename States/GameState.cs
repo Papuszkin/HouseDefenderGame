@@ -30,7 +30,10 @@ namespace HouseDefenderGame.States
 
         public static Player player;
         public static Shop houseShop;
-
+        //Health bar
+        Texture2D healthTexture;
+        Rectangle healthRectangle;
+        MouseState pastMouse;
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
@@ -51,11 +54,12 @@ namespace HouseDefenderGame.States
             Texture2D playerTexture = _content.Load<Texture2D>("Player");
             Texture2D zombieTexture = _content.Load<Texture2D>("Zombie1");
             Texture2D hitmarkTexture = _content.Load<Texture2D>("Hitmark");
-            player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
+            healthTexture = _content.Load<Texture2D>("Health");
+            player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture, 100);
 
             for (int i = 0; i < 10; i++)
             {
-                zombies.Add(new Zombie(zombieTexture, new Vector2(rnd.Next(10, 400), rnd.Next(10, 400)), 1, 3,(float)rnd.Next(1,10)));
+                zombies.Add(new Zombie(zombieTexture, new Vector2(rnd.Next(10, 400), rnd.Next(10, 400)), 1, 3,(float)rnd.Next(1,10),rnd.Next(1,7)));
             }
             
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
@@ -93,9 +97,19 @@ namespace HouseDefenderGame.States
                 _game.ChangeState(new MenuState(_game, _graphicsDevice, _content));
             KeyboardState ks = Keyboard.GetState();
 
+
+            MouseState mouse = Mouse.GetState();
+            Rectangle mouseRectangle = new Rectangle(mouse.X, mouse.Y, 1, 1);
+            healthRectangle = new Rectangle(50, 20,player.Health, 20);
+
+            //Tutaj logika otrzymywania obrażeń od zombie trzeba dodać
+            
+                
+
+
             // TODO: Add your update logic here
             player.Update(ks, gameTime, mapObjects);
-
+            pastMouse = mouse;
             foreach (var zombie in zombies)
             {
                 zombie.Update(entities);
@@ -149,9 +163,11 @@ namespace HouseDefenderGame.States
                 }
 	           
             }
-
-            player.Draw(spriteBatch, ms);
-
+            if (player.Health > 0)
+            {
+                player.Draw(spriteBatch, ms);
+            }
+            spriteBatch.Draw(healthTexture, healthRectangle, Color.White);
 
             spriteBatch.End();
 

@@ -23,15 +23,15 @@ namespace HouseDefenderGame.Classes.Gameplay
         public bool IsSolid { get; set; }
         public int Health { get; set; }
         public float zombieSpeed { get; set; }
-
+        public int zombieDamage { get; set; }
         private int currentFrame;
         private int totalFrames;
         public bool isMoving;
-
+        public int attackCooldown { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Zombie(Texture2D texture, Vector2 position, int rows, int columns,float speed)
+        public Zombie(Texture2D texture, Vector2 position, int rows, int columns,float speed, int damage)
         {
             X = (int)position.X;
             Y = (int)position.Y;
@@ -45,6 +45,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             IsSolid = true;
             Health = 20;
             zombieSpeed = speed;
+            zombieDamage = damage;
+            attackCooldown = 0;
         }
 
         public void Update(IEnumerable<ICollidable> collidables)
@@ -76,6 +78,13 @@ namespace HouseDefenderGame.Classes.Gameplay
             currentFrame++;
             if (currentFrame == totalFrames)
                 currentFrame = 0;
+
+            if (Hitbox.Intersects(GameState.player.Hitbox) && attackCooldown > 100)
+            {
+                attackCooldown = 0;
+                GameState.player.Health -= zombieDamage;
+            }
+            attackCooldown++;
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 playerPosition)
