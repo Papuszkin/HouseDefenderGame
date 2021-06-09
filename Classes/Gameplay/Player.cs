@@ -21,6 +21,7 @@ namespace HouseDefenderGame.Classes.Gameplay
         public List<Gun> GunInventory { get; set; }
         public int CurrentGun { get; set; }
         public int GunCooldown { get; set; }
+        public int Money { get; set; }
 
         public List<Vector2> Hitmarks { get; set; }
         public Texture2D HitmarkTexture { get; set; }
@@ -49,6 +50,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             };
             CurrentGun = 0;
             GunCooldown = 0;
+
+            Money = 20;
 
             Hitmarks = new List<Vector2>();
             HitmarkTexture = hitmarkTexture;
@@ -297,8 +300,8 @@ namespace HouseDefenderGame.Classes.Gameplay
                     // Przesuń sprawdzany punkt
                     if (!colided)
                     {
-                        xToCheck = xToCheck + Math.Cos(shootAngle) * 2;
-                        yToCheck = yToCheck + Math.Sin(shootAngle) * 2;
+                        xToCheck = xToCheck + Math.Cos(shootAngle) * 1.2;
+                        yToCheck = yToCheck + Math.Sin(shootAngle) * 1.2;
                     }
 
                     // Sprawdz czy nie jest za ekranem
