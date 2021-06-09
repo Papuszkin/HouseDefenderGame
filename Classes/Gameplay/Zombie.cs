@@ -22,16 +22,16 @@ namespace HouseDefenderGame.Classes.Gameplay
         public Rectangle Hitbox { get; set; }
         public bool IsSolid { get; set; }
         public int Health { get; set; }
+        public float zombieSpeed { get; set; }
 
         private int currentFrame;
         private int totalFrames;
-        private float zombieSpeed = 200f;
         public bool isMoving;
 
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Zombie(Texture2D texture, Vector2 position, int rows, int columns)
+        public Zombie(Texture2D texture, Vector2 position, int rows, int columns,float speed)
         {
             X = (int)position.X;
             Y = (int)position.Y;
@@ -43,7 +43,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             totalFrames = Rows * Columns;
             isMoving = false;
             IsSolid = true;
-            Health = 100;
+            Health = 20;
+            zombieSpeed = speed;
             Hitbox = new Rectangle(X, Y, texture.Width, texture.Height);
         }
 
@@ -54,11 +55,21 @@ namespace HouseDefenderGame.Classes.Gameplay
             var delta = new Vector2(playerPosition.X - Position.X, playerPosition.Y - Position.Y);
 
 
-            // Everything the enemy does during "following"
-            if (delta.Y >0 && delta.X>0)
+            if (Position.X > playerPosition.X)
             {
-                    Position.X = delta.X; // move enemy towards player
-                    Position.Y = delta.Y;
+                Position.X -= zombieSpeed / 10; 
+            }
+            if (Position.Y>playerPosition.Y)
+            {
+                Position.Y -= zombieSpeed / 10;
+            }
+            if (Position.X<=playerPosition.X)
+            {
+                Position.X += zombieSpeed / 10;
+            }
+            if (Position.Y<=playerPosition.Y)
+            {
+                Position.Y += zombieSpeed / 10;
             }
 
             currentFrame++;

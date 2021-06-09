@@ -41,7 +41,7 @@ namespace HouseDefenderGame.States
         public override void LoadContent()
         {
 
-
+            var rnd = new Random();
             Texture2D wallTexture = _content.Load<Texture2D>("tempWallRepeating");
             Texture2D windowTexture = _content.Load<Texture2D>("tempWindow");
             Texture2D windowTextureVertical = _content.Load<Texture2D>("tempWindowVertical");
@@ -52,9 +52,11 @@ namespace HouseDefenderGame.States
             Texture2D hitmarkTexture = _content.Load<Texture2D>("Hitmark");
             player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
 
-            zombies.Add(new Zombie(zombieTexture, new Vector2(120, 120), 1, 3));
-            //zombies.Add(new Zombie(zombieTexture, new Vector2(140, 120), 1, 3));
-
+            for (int i = 0; i < 10; i++)
+            {
+                zombies.Add(new Zombie(zombieTexture, new Vector2(rnd.Next(10, 400), rnd.Next(10, 400)), 1, 3,(float)rnd.Next(1,10)));
+            }
+            
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
             houseDoors.Add(new Door(400, 350, true, doorTexture));
             houseWalls.Add(new Wall(528, 350, 172, true, wallTexture));
@@ -92,7 +94,7 @@ namespace HouseDefenderGame.States
 
             foreach (var zombie in zombies)
             {
-                zombie.Update(mapObjects);
+                zombie.Update(entities);
             }
 
             PostUpdate(gameTime);
@@ -132,7 +134,11 @@ namespace HouseDefenderGame.States
 
             foreach (var zombie in zombies)
             {
-                zombie.Draw(spriteBatch, ms);
+                if (zombie.IsSolid)
+                {
+                    zombie.Draw(spriteBatch, ms);
+                }
+	           
             }
 
             player.Draw(spriteBatch, ms);
