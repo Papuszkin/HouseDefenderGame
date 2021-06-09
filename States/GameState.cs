@@ -17,24 +17,21 @@ namespace HouseDefenderGame.States
 {
     public class GameState : State
     {
-       
+
 
         public static Random random;
         private List<Wall> houseWalls = new List<Wall>();
         private List<Window> houseWindows = new List<Window>();
         private List<Door> houseDoors = new List<Door>();
+        private List<Zombie> zombies = new List<Zombie>();
 
         public static List<ICollidable> mapObjects = new List<ICollidable>();
         public static List<IEntity> entities = new List<IEntity>();
 
         public static Player player;
-
         public static Shop houseShop;
 
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
-
-
-
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphicsDevice, content)
@@ -44,17 +41,23 @@ namespace HouseDefenderGame.States
 
         public override void LoadContent()
         {
-            
 
+            var rnd = new Random();
             Texture2D wallTexture = _content.Load<Texture2D>("tempWallRepeating");
             Texture2D windowTexture = _content.Load<Texture2D>("tempWindow");
             Texture2D windowTextureVertical = _content.Load<Texture2D>("tempWindowVertical");
             Texture2D doorTexture = _content.Load<Texture2D>("tempDoor");
 
             Texture2D playerTexture = _content.Load<Texture2D>("Player");
+            Texture2D zombieTexture = _content.Load<Texture2D>("Zombie1");
             Texture2D hitmarkTexture = _content.Load<Texture2D>("Hitmark");
             player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture);
 
+            for (int i = 0; i < 10; i++)
+            {
+                zombies.Add(new Zombie(zombieTexture, new Vector2(rnd.Next(10, 400), rnd.Next(10, 400)), 1, 3,(float)rnd.Next(1,10)));
+            }
+            
             houseWalls.Add(new Wall(300, 350, 100, true, wallTexture));
             houseDoors.Add(new Door(400, 350, true, doorTexture));
             houseWalls.Add(new Wall(528, 350, 172, true, wallTexture));
@@ -71,8 +74,9 @@ namespace HouseDefenderGame.States
             mapObjects.AddRange(houseWalls);
             mapObjects.AddRange(houseWindows);
             entities.AddRange(houseWindows);
+            entities.AddRange(zombies);
 
-            //Muzyka Strzalu
+            //Dzwiek Strzalu
             SoundEffect.MasterVolume = 0.1f;
             soundEffects.Add(_content.Load<SoundEffect>("GunShot1"));
 
@@ -89,6 +93,13 @@ namespace HouseDefenderGame.States
                 _game.ChangeState(new MenuState(_game, _graphicsDevice, _content));
             KeyboardState ks = Keyboard.GetState();
 
+            // TODO: Add your update logic here
+            player.Update(ks, gameTime, mapObjects);
+
+            foreach (var zombie in zombies)
+            {
+                zombie.Update(entities);
+            }
             
             // TODO: Add your update logic here
             player.Update(ks, gameTime, mapObjects);
@@ -97,23 +108,23 @@ namespace HouseDefenderGame.States
 
             PostUpdate(gameTime);
 
-            
+
         }
 
         public override void PostUpdate(GameTime gameTime)
         {
-            
+
 
         }
 
-        
+
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             MouseState ms = Mouse.GetState();
             spriteBatch.Begin();
-            
-           
+
+
             foreach (var wall in houseWalls)
             {
                 wall.Draw(spriteBatch);
@@ -128,7 +139,19 @@ namespace HouseDefenderGame.States
             {
                 door.Draw(spriteBatch);
             }
+
+
+            foreach (var zombie in zombies)
+            {
+                if (zombie.IsSolid)
+                {
+                    zombie.Draw(spriteBatch,player.Position);
+                }
+	           
+            }
+
             player.Draw(spriteBatch, ms);
+
 
             spriteBatch.End();
 
