@@ -27,9 +27,10 @@ namespace HouseDefenderGame.States
         public static List<ICollidable> mapObjects = new List<ICollidable>();
         public static List<IEntity> entities = new List<IEntity>();
 
-        private Player player;
+        public static Player player;
 
-       
+        public static Shop houseShop;
+
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
 
@@ -75,6 +76,10 @@ namespace HouseDefenderGame.States
             SoundEffect.MasterVolume = 0.1f;
             soundEffects.Add(_content.Load<SoundEffect>("GunShot1"));
 
+            // Sklep
+            Texture2D shopTexture = _content.Load<Texture2D>("Shop");
+            houseShop = new Shop(new Vector2(1100, 180), 0f, shopTexture);
+
         }
 
 
@@ -85,10 +90,10 @@ namespace HouseDefenderGame.States
             KeyboardState ks = Keyboard.GetState();
 
             
-
             // TODO: Add your update logic here
             player.Update(ks, gameTime, mapObjects);
 
+            houseShop.Update(ks);
 
             PostUpdate(gameTime);
 
@@ -126,6 +131,8 @@ namespace HouseDefenderGame.States
             player.Draw(spriteBatch, ms);
 
             spriteBatch.End();
+
+            houseShop.Draw(spriteBatch);
         }
 
     }
