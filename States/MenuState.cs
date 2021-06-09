@@ -70,7 +70,7 @@ namespace HouseDefenderGame.States
 
         public override void PostUpdate(GameTime gameTime)
         {
-            // remove sprites if they're not needed
+            
         }
 
         public override void Update(GameTime gameTime)

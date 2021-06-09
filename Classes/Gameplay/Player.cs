@@ -29,8 +29,11 @@ namespace HouseDefenderGame.Classes.Gameplay
         private int totalFrames;
         private float playerSpeed = 200f;
         public bool isMoving;
+        public Rectangle rectangle;
+        public int health;
+        public int armor;
 
-        public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture)
+        public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture, int newHealth, int newArmor)
         {
             Texture = texture;
             Position = position;
@@ -39,6 +42,8 @@ namespace HouseDefenderGame.Classes.Gameplay
             currentFrame = 0;
             totalFrames = Rows * Columns;
             isMoving = false;
+            health = newHealth;
+            armor = newArmor;
 
             GunInventory = new List<Gun> {
                 // Name Damage Pellets Spread RateOfFire
@@ -59,7 +64,7 @@ namespace HouseDefenderGame.Classes.Gameplay
         {
 
             MouseState mouseState = Mouse.GetState();
-
+            rectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
             // W
             // Move up
             if (keyboardState.IsKeyDown(Keys.W))
@@ -208,6 +213,8 @@ namespace HouseDefenderGame.Classes.Gameplay
 
         public void Draw(SpriteBatch spriteBatch, MouseState mouseState)
         {
+            
+
             Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
             Vector2 dPos = Position - mousePosition;
             Rotation = (float)Math.Atan2(dPos.Y, dPos.X);
@@ -222,9 +229,10 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             Vector2 origin = new Vector2(width / 2, height / 2);
 
-            
-            spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
-
+            if (health > 0)
+            {
+                spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
+            }
             foreach (var mark in Hitmarks)
             {
                 spriteBatch.Draw(HitmarkTexture, new Rectangle((int)mark.X, (int)mark.Y, 32, 32), Color.Red);
