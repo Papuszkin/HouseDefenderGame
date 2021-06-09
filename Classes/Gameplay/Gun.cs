@@ -23,7 +23,7 @@ namespace HouseDefenderGame.Classes.Gameplay
             PelletCount = pelletCount;
             Spread = spread;
             RateOfFire = rateOfFire;
-            AmmoCount = 300;
+            AmmoCount = 5;
         }
     }
 }
