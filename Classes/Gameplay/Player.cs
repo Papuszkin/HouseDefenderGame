@@ -287,13 +287,6 @@ namespace HouseDefenderGame.Classes.Gameplay
                         }
                     }
 
-                    if (!colided)
-                    {
-                        
-                    }
-
-
-
                     // Przesuń sprawdzany punkt
                     if (!colided)
                     {

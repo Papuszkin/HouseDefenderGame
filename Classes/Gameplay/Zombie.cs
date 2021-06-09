@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace HouseDefenderGame.Classes.Gameplay
 {
-    public class Zombie
+    public class Zombie : IEntity
     {
         public Texture2D Texture { get; set; }
         public int Rows { get; set; }
@@ -19,14 +19,22 @@ namespace HouseDefenderGame.Classes.Gameplay
         public Vector2 Position;
         public float Rotation { get; set; }
 
+        public Rectangle Hitbox { get ; set; }
+        public bool IsSolid { get; set; }
+        public int Health { get ; set; }
 
         private int currentFrame;
         private int totalFrames;
-        private float zombieSpeed = 20f;
+        private float zombieSpeed = 200f;
         public bool isMoving;
+
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Zombie(Texture2D texture, Vector2 position, int rows, int columns)
         {
+            X = (int)position.X;
+            Y = (int)position.Y;
             Texture = texture;
             Position = position;
             Rows = rows;
@@ -34,6 +42,9 @@ namespace HouseDefenderGame.Classes.Gameplay
             currentFrame = 0;
             totalFrames = Rows * Columns;
             isMoving = false;
+            IsSolid = true;
+            Health = 10;
+            Hitbox = new Rectangle(X,Y,texture.Width,texture.Height);
         }
 
         public void Update(IEnumerable<ICollidable> collidables)
@@ -41,9 +52,11 @@ namespace HouseDefenderGame.Classes.Gameplay
             var rnd = new Random();
             var delta = new Vector2(Position.X, Position.Y);
 
-
-            Position.X = zombieSpeed + rnd.Next(1, 12);
-            Position.Y = zombieSpeed + rnd.Next(1, 12);
+            if (rnd.Next(1,2)==10)
+            {
+                Position.X = zombieSpeed + rnd.Next(1, 20);
+                Position.Y = zombieSpeed + rnd.Next(1, 10);
+            }
             currentFrame++;
             if (currentFrame == totalFrames)
                 currentFrame = 0;
@@ -69,6 +82,15 @@ namespace HouseDefenderGame.Classes.Gameplay
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
 
             
+        }
+
+        public void Hurt(int damage)
+        {
+            Health -= damage;
+            if (Health==0)
+            {
+                IsSolid = false;
+            }
         }
     }
 }
