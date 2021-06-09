@@ -28,8 +28,7 @@ namespace HouseDefenderGame.States
         public static List<ICollidable> mapObjects = new List<ICollidable>();
         public static List<IEntity> entities = new List<IEntity>();
 
-        private Player player;
-        private Zombie zombie;
+        public static Player player;
 
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
@@ -90,6 +89,7 @@ namespace HouseDefenderGame.States
 
             // TODO: Add your update logic here
             player.Update(ks, gameTime, mapObjects);
+
             foreach (var zombie in zombies)
             {
                 zombie.Update(mapObjects);

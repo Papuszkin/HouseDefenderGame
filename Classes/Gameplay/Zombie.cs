@@ -19,9 +19,9 @@ namespace HouseDefenderGame.Classes.Gameplay
         public Vector2 Position;
         public float Rotation { get; set; }
 
-        public Rectangle Hitbox { get ; set; }
+        public Rectangle Hitbox { get; set; }
         public bool IsSolid { get; set; }
-        public int Health { get ; set; }
+        public int Health { get; set; }
 
         private int currentFrame;
         private int totalFrames;
@@ -43,20 +43,24 @@ namespace HouseDefenderGame.Classes.Gameplay
             totalFrames = Rows * Columns;
             isMoving = false;
             IsSolid = true;
-            Health = 10;
-            Hitbox = new Rectangle(X,Y,texture.Width,texture.Height);
+            Health = 100;
+            Hitbox = new Rectangle(X, Y, texture.Width, texture.Height);
         }
 
         public void Update(IEnumerable<ICollidable> collidables)
         {
             var rnd = new Random();
-            var delta = new Vector2(Position.X, Position.Y);
+            var playerPosition = new Vector2(GameState.player.Position.X, GameState.player.Position.Y);
+            var delta = new Vector2(playerPosition.X - Position.X, playerPosition.Y - Position.Y);
 
-            if (rnd.Next(1,2)==10)
+
+            // Everything the enemy does during "following"
+            if (delta.Y >0 && delta.X>0)
             {
-                Position.X = zombieSpeed + rnd.Next(1, 20);
-                Position.Y = zombieSpeed + rnd.Next(1, 10);
+                    Position.X = delta.X; // move enemy towards player
+                    Position.Y = delta.Y;
             }
+
             currentFrame++;
             if (currentFrame == totalFrames)
                 currentFrame = 0;
@@ -81,13 +85,13 @@ namespace HouseDefenderGame.Classes.Gameplay
 
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, Rotation + (float)(3 * Math.PI / 2), origin, SpriteEffects.None, 1);
 
-            
+
         }
 
         public void Hurt(int damage)
         {
             Health -= damage;
-            if (Health==0)
+            if (Health == 0)
             {
                 IsSolid = false;
             }
