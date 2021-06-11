@@ -22,6 +22,7 @@ namespace HouseDefenderGame.Classes
             Rows = rows;
             Columns = columns;
             currentFrame = 0;
+            
         }
 
         public new void Draw(SpriteBatch spriteBatch)

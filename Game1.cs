@@ -65,11 +65,10 @@ namespace HouseDefenderGame
                 _nextState = null;
             }
 
+
             _currentState.Update(gameTime);
 
             _currentState.PostUpdate(gameTime);
-
-
 
             base.Update(gameTime);
         }

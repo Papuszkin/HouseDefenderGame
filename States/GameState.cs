@@ -64,7 +64,7 @@ namespace HouseDefenderGame.States
             Texture2D zombieTexture = _content.Load<Texture2D>("Zombie1");
             Texture2D hitmarkTexture = _content.Load<Texture2D>("Hitmark");
             healthTexture = _content.Load<Texture2D>("Health");
-            player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture, 100);
+            player = new Player(playerTexture, new Vector2(-100, -100), 1, 3, hitmarkTexture, 100);
 
             var rnd = new Random();
             for (int i = 0; i < 10; i++)
