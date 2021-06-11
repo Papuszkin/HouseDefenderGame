@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HouseDefenderGame.Classes;
 using HouseDefenderGame.Classes.Gameplay;
 using HouseDefenderGame.Classes.Map;
 using HouseDefenderGame.Interfaces;
@@ -36,6 +37,11 @@ namespace HouseDefenderGame.States
         MouseState pastMouse;
         public static List<SoundEffect> soundEffects = new List<SoundEffect>();
 
+        // Error loading log
+        public static string errorLog;
+        public TextureLoader Loader;
+        private SpriteFont arialFont;
+
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphicsDevice, content)
         {
@@ -44,12 +50,15 @@ namespace HouseDefenderGame.States
 
         public override void LoadContent()
         {
+            errorLog = "";
+            Loader = new TextureLoader(_content);
+            arialFont = _content.Load<SpriteFont>("font");
 
-            var rnd = new Random();
-            Texture2D wallTexture = _content.Load<Texture2D>("tempWallRepeating");
-            Texture2D windowTexture = _content.Load<Texture2D>("tempWindow");
-            Texture2D windowTextureVertical = _content.Load<Texture2D>("tempWindowVertical");
-            Texture2D doorTexture = _content.Load<Texture2D>("tempDoor");
+            Texture2D wallTexture, windowTexture, windowTextureVertical, doorTexture;
+            wallTexture = Loader.loadTexture("tempWallRepeating");
+            windowTexture = Loader.loadTexture("tempWindow");
+            windowTextureVertical = Loader.loadTexture("tempWindowVertica");
+            doorTexture = Loader.loadTexture("tempDoor");
 
             Texture2D playerTexture = _content.Load<Texture2D>("Player");
             Texture2D zombieTexture = _content.Load<Texture2D>("Zombie1");
@@ -57,6 +66,7 @@ namespace HouseDefenderGame.States
             healthTexture = _content.Load<Texture2D>("Health");
             player = new Player(playerTexture, new Vector2(100, 100), 1, 3, hitmarkTexture, 100);
 
+            var rnd = new Random();
             for (int i = 0; i < 10; i++)
             {
                 zombies.Add(new Zombie(zombieTexture, new Vector2(rnd.Next(10, 400), rnd.Next(10, 400)), 1, 3,(float)rnd.Next(1,10),rnd.Next(1,7)));
@@ -74,6 +84,8 @@ namespace HouseDefenderGame.States
             houseWalls.Add(new Wall(1168, 150, 450, false, wallTexture));
             houseWalls.Add(new Wall(300, 600, 900, true, wallTexture));
             houseWalls.Add(new Wall(300, 350, 250, false, wallTexture));
+
+
 
             mapObjects.AddRange(houseWalls);
             mapObjects.AddRange(houseWindows);
@@ -168,6 +180,8 @@ namespace HouseDefenderGame.States
                 player.Draw(spriteBatch, ms);
             }
             spriteBatch.Draw(healthTexture, healthRectangle, Color.White);
+
+            spriteBatch.DrawString(arialFont, errorLog, new Vector2(10, 10), Color.Black);
 
             spriteBatch.End();
 
