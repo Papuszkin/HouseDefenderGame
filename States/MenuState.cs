@@ -30,7 +30,7 @@ namespace HouseDefenderGame.States
 
             newGameButton.Click += NewGameButton_Click;
 
-            
+
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
@@ -43,7 +43,7 @@ namespace HouseDefenderGame.States
             _components = new List<Component>()
       {
         newGameButton,
-        
+
         quitGameButton,
       };
         }
@@ -61,7 +61,7 @@ namespace HouseDefenderGame.States
             spriteBatch.End();
         }
 
-        
+
 
         private void NewGameButton_Click(object sender, EventArgs e)
         {
