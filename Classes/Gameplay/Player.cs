@@ -41,7 +41,25 @@ namespace HouseDefenderGame.Classes.Gameplay
         public Player(Texture2D texture, Vector2 position, int rows, int columns, Texture2D hitmarkTexture, int newhealth)
         {
             Texture = texture;
-            Position = position;
+
+            try
+            {
+                if (position.X < 0 || position.Y < 0)
+                {
+                    throw new Exception();
+                }
+                else
+                {
+                    this.Position = position;
+                }
+            }
+            catch (Exception)
+            {
+                HouseDefenderGame.States.GameState.errorLog += "\nPlayer created outside of game area.";
+                this.Position = new Vector2(100, 100);
+
+            }
+
             Rows = rows;
             Columns = columns;
             currentFrame = 0;
